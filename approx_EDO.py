@@ -87,4 +87,34 @@ def separate_solutions(t_,u_,v_,tini,tfin): #Pour separer les solutions pour un 
             vret.append(v_[i])
     return tret, uret, vret
 
+def EulerSymplectique(t0, x0, T, dt, f):
+    # x0 et f(x0, t0) doivent etre des vecteurs lignes
+    # renvoie TPS et X
+    # TPS est un vecteur ligne contenant les (N+1) temps intermediaires (t0, ..., tN)
+    # X a autant de colonnes que X0 et N+1 lignes; le résultat au temps ti est sur la ligne (i+1)
+    if np.size(x0)==1: # on regarde si x0 est un reel
+        # dans ce cas on le transforme en vecteur ligne de taille 1
+        x0=np.array([float(x0)])
+
+    # initialisation
+    TPS=[t0] # TPS est un vecteur ligne
+    X=[x0] #TPS est un tableau avec le même nombre de colonne que x0, et une ligne pour chaque t_i
+
+    while t0 < T:
+        # calcul de ma solution au temps suivant
+        t1=t0+dt
+        aux1=x0+dt*f(x0,t0)
+        aux2=x0+dt*f([aux1[0],x0[1]],t1)
+        x1 = np.asarray([aux1[0],aux2[1]])
+        
+        # stockage des resultats
+        TPS=np.append(TPS,[t1])
+        X=np.concatenate((X,[x1]))
+        
+        # actualisation des valeurs
+        t0=t1
+        x0=x1
+    return TPS, X
+
+
 
