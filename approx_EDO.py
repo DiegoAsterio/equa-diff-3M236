@@ -116,5 +116,7 @@ def EulerSymplectique(t0, x0, T, dt, f):
         x0=x1
     return TPS, X
 
+def errormax(ze_,zn_):
+    return np.linalg.norm(ze_-zn_,ord=np.inf) 
 
 
